@@ -5,6 +5,8 @@ const WebSocket = require('ws');
 var fs = require('fs')
 const upload = require('express-fileupload');
 
+var getNameFile = "";
+
 const wss = new WebSocket.Server({ server:server });
 
 app.use(upload())
@@ -12,12 +14,13 @@ app.use(upload())
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
 
-  fs.readFile('uploads/readme.txt', 'utf8', function(err, data) {
-    if (err) throw err;
-    console.log(data);
-    ws.send(data); 
-  });
-
+  if(getNameFile != ""){
+    fs.readFile('uploads/'+getNameFile, 'utf8', function(err, data) {
+      if (err) throw err;
+      console.log(data);
+      ws.send(data); 
+    });
+  }
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
 
@@ -40,6 +43,7 @@ app.post('/', (req, res) => {
       console.log(req.files)
       var file = req.files.file
       var filename = file.name
+      getNameFile = filename;
       console.log(filename)
 
       file.mv('./uploads/'+filename, function (err) {
@@ -47,7 +51,8 @@ app.post('/', (req, res) => {
               res.send(err)
           } else {
               console.log("File Uploaded");
-              res.redirect('/');
+              // res.redirect('/');
+              res.redirect('/server');
           }
       })
   }
