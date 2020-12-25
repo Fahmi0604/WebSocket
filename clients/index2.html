@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket Thing2</title>
+    <link rel="shortcut icon" href="#">
+</head>
+<body>
+    Server
+        <!-- <button onclick="sendMessage()">Listen</button> -->
+        <br>
+        
+        <button onclick="btnListen()">Listen</button>
+        <textarea id="txtFile2" style="width: 500px;height: 300px;"></textarea>
+</body>
+<script>
+    // Create WebSocket connection.
+    const socket = new WebSocket('ws://localhost:3000');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+        console.log('Connected to WS Server')
+    });
+
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server '+ event.data);
+        document.getElementById('txtFile2').value = event.data;
+    });
+
+    socket.onmessage = function (event) {
+        console.debug("WebSocket message received:", event);
+    }
+
+    const sendMessage = ('message', function(event) {
+        document.getElementById('txtFile').value = event.data;
+    });
+
+    const btnListen = () => {
+        window.location.reload();
+    }
+</script>
+</html>
