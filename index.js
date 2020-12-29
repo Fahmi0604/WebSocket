@@ -5,6 +5,8 @@ const WebSocket = require('ws');
 var fs = require('fs')
 const upload = require('express-fileupload');
 
+app.use(express.static(path.join(__dirname, "/public")));
+
 var getNameFile = "";
 
 const wss = new WebSocket.Server({ server:server });
@@ -52,7 +54,8 @@ app.post('/', (req, res) => {
           } else {
               console.log("File Uploaded");
               // res.redirect('/');
-              res.redirect('/server');
+              // res.render(__dirname + "/clients/index2.html", {name:'refresh'});
+              res.redirect('/');
           }
       })
   }
